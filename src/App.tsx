@@ -1,9 +1,273 @@
-import { Experience } from './components/Experience'
+import { useEffect, useRef, useState } from 'react'
+import './index.css'
+
+// Dust particle system
+const DustCanvas = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let animationId: number
+    const particles: Array<{
+      x: number; y: number; size: number; speedX: number; speedY: number; opacity: number
+    }> = []
+
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    // Create particles
+    for (let i = 0; i < 80; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: (Math.random() - 0.5) * 0.15 - 0.1,
+        opacity: Math.random() * 0.5 + 0.1,
+      })
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      particles.forEach((p) => {
+        p.x += p.speedX
+        p.y += p.speedY
+        if (p.x < 0) p.x = canvas.width
+        if (p.x > canvas.width) p.x = 0
+        if (p.y < 0) p.y = canvas.height
+        if (p.y > canvas.height) p.y = 0
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(212, 168, 83, ${p.opacity})`
+        ctx.fill()
+      })
+      animationId = requestAnimationFrame(animate)
+    }
+    animate()
+
+    return () => {
+      cancelAnimationFrame(animationId)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
+
+  return <canvas ref={canvasRef} id="dust-canvas" />
+}
+
+// Section data
+const sections = [
+  {
+    id: 'great-bath',
+    number: '01',
+    title: 'The Great Bath',
+    image: '/images/great-bath.png',
+    paragraphs: [
+      'The most remarkable structure of Mohenjo-daro — a massive watertight tank built with precision-cut baked bricks, sealed with gypsum mortar and a layer of natural bitumen (tar).',
+      'Measuring 12m long, 7m wide, and 2.4m deep, it was likely used for ritualistic bathing or purification ceremonies, reflecting the civilization\'s deep reverence for hygiene and water.',
+    ],
+    facts: [
+      { icon: '🧱', text: 'Built with standardised baked bricks and waterproof bitumen' },
+      { icon: '🛁', text: 'Likely used for ritual purification and religious ceremonies' },
+      { icon: '💧', text: 'Connected to a sophisticated water supply and drainage system' },
+    ],
+  },
+  {
+    id: 'bath-steps',
+    number: '02',
+    title: 'Stepped Pool & Architecture',
+    image: '/images/bath-steps.png',
+    paragraphs: [
+      'The Great Bath featured wide, descending steps on both ends, allowing easy entry into the pool. The surrounding corridors had small rooms, possibly used as changing rooms for visitors.',
+      'The architectural precision is extraordinary — bricks were laid with remarkable uniformity, and the entire structure was designed to prevent any water leakage, 4,500 years ago.',
+    ],
+    facts: [
+      { icon: '📐', text: 'Steps on north and south ends for easy access to the pool' },
+      { icon: '🏛️', text: 'Surrounding rooms served as changing areas or private baths' },
+      { icon: '⚙️', text: 'No water leakage — a feat of 4,500-year-old engineering' },
+    ],
+  },
+  {
+    id: 'drainage',
+    number: '03',
+    title: 'Drainage System',
+    image: '/images/drainage.png',
+    paragraphs: [
+      'Mohenjo-daro possessed the world\'s first known urban sanitation system. Covered drains ran along every major street, connected to individual houses through terracotta pipes.',
+      'Soak pits and inspection manholes were placed at regular intervals for cleaning and maintenance. This level of urban planning would not be seen again for thousands of years.',
+    ],
+    facts: [
+      { icon: '🔧', text: 'Covered brick drains along every street with inspection manholes' },
+      { icon: '🏠', text: 'Each house had its own bathroom connected to the main drain' },
+      { icon: '🌍', text: 'Most advanced sanitation system of the ancient world' },
+    ],
+  },
+  {
+    id: 'agriculture',
+    number: '04',
+    title: 'Agriculture & Trade',
+    image: '/images/agriculture.png',
+    paragraphs: [
+      'The fertile Indus floodplain supported extensive agriculture — wheat, barley, peas, and cotton were cultivated. The Great Granary stored surplus grain for the city\'s population.',
+      'Trade networks extended to Mesopotamia, with distinctive Indus seals, beads, and weights found across the ancient world. A standardised system of weights and measures facilitated commerce.',
+    ],
+    facts: [
+      { icon: '🌾', text: 'Wheat, barley, and cotton were primary crops of the region' },
+      { icon: '🏛️', text: 'The Great Granary stored food for the entire city' },
+      { icon: '⚖️', text: 'Standardised weights and measures for trade across civilisations' },
+    ],
+  },
+  {
+    id: 'city-planning',
+    number: '05',
+    title: 'Urban Planning',
+    image: '/images/city-aerial.png',
+    paragraphs: [
+      'Mohenjo-daro\'s grid-like street system is one of the earliest examples of urban planning. Main streets ran perfectly North-South and East-West, intersecting at right angles.',
+      'Houses were constructed with standardised baked bricks (ratio 1:2:4), had multiple rooms, courtyards, wells, and private bathrooms — a level of domestic comfort unmatched in the ancient world.',
+    ],
+    facts: [
+      { icon: '🗺️', text: 'Perfect grid layout with streets running N-S and E-W' },
+      { icon: '🧱', text: 'Standardised brick ratio of 1:2:4 used across the entire city' },
+      { icon: '🏘️', text: 'Multi-room houses with courtyards, wells, and bathrooms' },
+    ],
+  },
+]
 
 function App() {
+  const [loaded, setLoaded] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => setLoaded(true), 2000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Scroll reveal
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible')
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [loaded])
+
   return (
     <>
-      <Experience />
+      {/* Loading screen */}
+      <div className={`loader ${loaded ? 'hidden' : ''}`}>
+        <h1>MOHENJO-DARO</h1>
+        <div className="loader-bar" />
+      </div>
+
+      {/* Dust particles */}
+      <DustCanvas />
+
+      {/* Navigation */}
+      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+        <a href="#" className="nav-logo">MOHENJO-DARO</a>
+        <ul className="nav-links">
+          <li><a href="#great-bath">Great Bath</a></li>
+          <li><a href="#drainage">Drainage</a></li>
+          <li><a href="#agriculture">Agriculture</a></li>
+          <li><a href="#city-planning">City</a></li>
+          <li><a href="#credits">Credits</a></li>
+        </ul>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="hero-bg" />
+        <div className="hero-overlay" />
+        <div className="hero-content">
+          <p className="hero-subtitle">Indus Valley Civilization · 2500 BCE</p>
+          <h1 className="hero-title">
+            MOHENJO-DARO
+            <span>Mound of the Dead</span>
+          </h1>
+          <p className="hero-desc">
+            An interactive journey through one of the world's earliest great cities —
+            where urban planning, engineering, and culture flourished over 4,500 years ago.
+          </p>
+          <div className="hero-scroll">
+            <span>Scroll to Explore</span>
+            <div className="scroll-line" />
+          </div>
+        </div>
+      </section>
+
+      {/* Content Sections */}
+      {sections.map((section) => (
+        <section key={section.id} id={section.id} className="section">
+          <div
+            className="section-bg"
+            style={{ backgroundImage: `url(${section.image})` }}
+          />
+          <div className="section-gradient" />
+          <div className="section-content">
+            <div className="section-number reveal reveal-delay-1">
+              {section.number}
+            </div>
+            <h2 className="section-title reveal reveal-delay-2">
+              {section.title}
+            </h2>
+            {section.paragraphs.map((p, i) => (
+              <p key={i} className="section-text reveal reveal-delay-3">
+                {p}
+              </p>
+            ))}
+            <div className="section-facts reveal reveal-delay-4">
+              {section.facts.map((fact, i) => (
+                <div key={i} className="fact">
+                  <span className="fact-icon">{fact.icon}</span>
+                  <span className="fact-text">{fact.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ))}
+
+      {/* Credits Section */}
+      <section id="credits" className="credits">
+        <div className="credits-content">
+          <p className="credits-title reveal">Project Report</p>
+          <div className="credits-card reveal reveal-delay-1">
+            <h2 className="credits-name">Hardik Jain</h2>
+            <p className="credits-school">Vidya Global School</p>
+            <div className="credits-divider" />
+            <p className="credits-label">Subject</p>
+            <p className="credits-subject">Social Science (SST)</p>
+          </div>
+          <p className="credits-footer reveal reveal-delay-2">
+            Built with ❤️ by Hindia Tech Labs
+          </p>
+        </div>
+      </section>
     </>
   )
 }

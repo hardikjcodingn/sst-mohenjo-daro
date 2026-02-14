@@ -1,9 +1,10 @@
-import { ScrollControls, Scroll, Sky, Environment, useScroll } from '@react-three/drei'
+import { ScrollControls, Scroll, Sky, Environment, useScroll, Loader } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { GreatBath } from './City/GreatBath'
 import { Citadel } from './City/Citadel'
 import { LowerTown } from './City/LowerTown'
 import { Overlay } from './Overlay'
+import { Suspense } from 'react'
 import * as THREE from 'three'
 
 const CameraController = () => {
