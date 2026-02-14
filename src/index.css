@@ -197,7 +197,7 @@ body {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('/images/city-aerial.png');
+  background-image: url('/images/city-aerial.jpg');
   background-size: cover;
   background-position: center;
   transform: scale(1.1);

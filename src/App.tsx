@@ -64,40 +64,25 @@ const DustCanvas = () => {
 // Section data
 const sections = [
   {
-    id: 'great-bath',
+    id: 'city-planning',
     number: '01',
-    title: 'The Great Bath',
-    image: '/images/great-bath.png',
+    title: 'Urban Planning',
+    image: '/images/city-aerial.jpg',
     paragraphs: [
-      'The most remarkable structure of Mohenjo-daro — a massive watertight tank built with precision-cut baked bricks, sealed with gypsum mortar and a layer of natural bitumen (tar).',
-      'Measuring 12m long, 7m wide, and 2.4m deep, it was likely used for ritualistic bathing or purification ceremonies, reflecting the civilization\'s deep reverence for hygiene and water.',
+      'Mohenjo-daro\'s grid-like street system is one of the earliest examples of urban planning. Main streets ran perfectly North-South and East-West, intersecting at right angles.',
+      'Houses were constructed with standardised baked bricks (ratio 1:2:4), had multiple rooms, courtyards, wells, and private bathrooms — unmatched comfort in the ancient world.',
     ],
     facts: [
-      { icon: '🧱', text: 'Built with standardised baked bricks and waterproof bitumen' },
-      { icon: '🛁', text: 'Likely used for ritual purification and religious ceremonies' },
-      { icon: '💧', text: 'Connected to a sophisticated water supply and drainage system' },
-    ],
-  },
-  {
-    id: 'bath-steps',
-    number: '02',
-    title: 'Stepped Pool & Architecture',
-    image: '/images/bath-steps.png',
-    paragraphs: [
-      'The Great Bath featured wide, descending steps on both ends, allowing easy entry into the pool. Surrounding corridors had small rooms, possibly used as changing rooms for visitors.',
-      'The architectural precision is extraordinary — bricks were laid with remarkable uniformity, and the entire structure was designed to prevent any water leakage, 4,500 years ago.',
-    ],
-    facts: [
-      { icon: '📐', text: 'Steps on north and south ends for easy access to the pool' },
-      { icon: '🏛️', text: 'Surrounding rooms served as changing areas or private baths' },
-      { icon: '⚙️', text: 'No water leakage — a feat of 4,500-year-old engineering' },
+      { icon: '🗺️', text: 'Perfect grid layout with streets running N-S and E-W' },
+      { icon: '🧱', text: 'Standardised brick ratio of 1:2:4 used across the entire city' },
+      { icon: '🏘️', text: 'Multi-room houses with courtyards, wells, and bathrooms' },
     ],
   },
   {
     id: 'drainage',
-    number: '03',
+    number: '02',
     title: 'Drainage System',
-    image: '/images/drainage.png',
+    image: '/images/drainage.jpg',
     paragraphs: [
       'Mohenjo-daro possessed the world\'s first known urban sanitation system. Covered drains ran along every major street, connected to individual houses through terracotta pipes.',
       'Soak pits and inspection manholes were placed at regular intervals for cleaning. This level of urban planning would not be seen again for thousands of years.',
@@ -110,9 +95,9 @@ const sections = [
   },
   {
     id: 'agriculture',
-    number: '04',
+    number: '03',
     title: 'Agriculture & Trade',
-    image: '/images/agriculture.png',
+    image: '/images/agriculture.jpg',
     paragraphs: [
       'The fertile Indus floodplain supported extensive agriculture — wheat, barley, peas, and cotton were cultivated. The Great Granary stored surplus grain for the city\'s population.',
       'Trade networks extended to Mesopotamia, with distinctive Indus seals, beads, and weights found across the ancient world.',
@@ -124,18 +109,33 @@ const sections = [
     ],
   },
   {
-    id: 'city-planning',
-    number: '05',
-    title: 'Urban Planning',
-    image: '/images/city-aerial.png',
+    id: 'great-bath',
+    number: '04',
+    title: 'The Great Bath',
+    image: '/images/great-bath.jpg',
     paragraphs: [
-      'Mohenjo-daro\'s grid-like street system is one of the earliest examples of urban planning. Main streets ran perfectly North-South and East-West, intersecting at right angles.',
-      'Houses were constructed with standardised baked bricks (ratio 1:2:4), had multiple rooms, courtyards, wells, and private bathrooms — unmatched comfort in the ancient world.',
+      'The most remarkable structure of Mohenjo-daro — a massive watertight tank built with precision-cut baked bricks, sealed with gypsum mortar and a layer of natural bitumen (tar).',
+      'Measuring 12m long, 7m wide, and 2.4m deep, it was likely used for ritualistic bathing or purification ceremonies, reflecting the civilization\'s deep reverence for hygiene and water.',
     ],
     facts: [
-      { icon: '🗺️', text: 'Perfect grid layout with streets running N-S and E-W' },
-      { icon: '🧱', text: 'Standardised brick ratio of 1:2:4 used across the entire city' },
-      { icon: '🏘️', text: 'Multi-room houses with courtyards, wells, and bathrooms' },
+      { icon: '🧱', text: 'Built with standardised baked bricks and waterproof bitumen' },
+      { icon: '🛁', text: 'Likely used for ritual purification and religious ceremonies' },
+      { icon: '💧', text: 'Connected to a sophisticated water supply and drainage system' },
+    ],
+  },
+  {
+    id: 'dam',
+    number: '05',
+    title: 'Water Management & Dam',
+    image: '/images/dam.jpg',
+    paragraphs: [
+      'The Indus Valley people engineered sophisticated dams and water control systems to manage the mighty Indus River. These structures prevented flooding and directed water to agricultural fields.',
+      'The dam architecture showcased advanced hydraulic engineering — carefully designed sluice gates, retention walls, and overflow channels that still inspire modern engineers today.',
+    ],
+    facts: [
+      { icon: '🌊', text: 'Massive dams controlled river flow and prevented seasonal flooding' },
+      { icon: '💧', text: 'Irrigation channels distributed water across vast agricultural areas' },
+      { icon: '⚙️', text: 'Sluice gates and overflow systems managed water levels precisely' },
     ],
   },
 ]
@@ -180,14 +180,15 @@ function App() {
       {/* Dust particles */}
       <DustCanvas />
 
-      {/* Navigation — NO credits link */}
+      {/* Navigation */}
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <a href="#" className="nav-logo">MOHENJO-DARO</a>
         <ul className="nav-links">
-          <li><a href="#great-bath">Great Bath</a></li>
+          <li><a href="#city-planning">City</a></li>
           <li><a href="#drainage">Drainage</a></li>
           <li><a href="#agriculture">Agriculture</a></li>
-          <li><a href="#city-planning">City</a></li>
+          <li><a href="#great-bath">Great Bath</a></li>
+          <li><a href="#dam">Dam</a></li>
         </ul>
       </nav>
 
@@ -248,21 +249,6 @@ function App() {
           </div>
         </section>
       ))}
-
-      {/* Small credits footer — NO separate section */}
-      <footer className="credits">
-        <div className="credits-content">
-          <div className="credits-card">
-            <p className="credits-title">Project Report</p>
-            <h2 className="credits-name">Hardik Jain</h2>
-            <p className="credits-school">Vidya Global School</p>
-            <div className="credits-divider" />
-            <p className="credits-label">Subject</p>
-            <p className="credits-subject">Social Science (SST)</p>
-          </div>
-          <p className="credits-footer">Built with ❤️ by Hindia Tech Labs</p>
-        </div>
-      </footer>
     </>
   )
 }
