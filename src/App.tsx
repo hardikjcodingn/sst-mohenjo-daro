@@ -23,7 +23,6 @@ const DustCanvas = () => {
     resize()
     window.addEventListener('resize', resize)
 
-    // Create particles
     for (let i = 0; i < 80; i++) {
       particles.push({
         x: Math.random() * canvas.width,
@@ -85,7 +84,7 @@ const sections = [
     title: 'Stepped Pool & Architecture',
     image: '/images/bath-steps.png',
     paragraphs: [
-      'The Great Bath featured wide, descending steps on both ends, allowing easy entry into the pool. The surrounding corridors had small rooms, possibly used as changing rooms for visitors.',
+      'The Great Bath featured wide, descending steps on both ends, allowing easy entry into the pool. Surrounding corridors had small rooms, possibly used as changing rooms for visitors.',
       'The architectural precision is extraordinary — bricks were laid with remarkable uniformity, and the entire structure was designed to prevent any water leakage, 4,500 years ago.',
     ],
     facts: [
@@ -101,7 +100,7 @@ const sections = [
     image: '/images/drainage.png',
     paragraphs: [
       'Mohenjo-daro possessed the world\'s first known urban sanitation system. Covered drains ran along every major street, connected to individual houses through terracotta pipes.',
-      'Soak pits and inspection manholes were placed at regular intervals for cleaning and maintenance. This level of urban planning would not be seen again for thousands of years.',
+      'Soak pits and inspection manholes were placed at regular intervals for cleaning. This level of urban planning would not be seen again for thousands of years.',
     ],
     facts: [
       { icon: '🔧', text: 'Covered brick drains along every street with inspection manholes' },
@@ -116,12 +115,12 @@ const sections = [
     image: '/images/agriculture.png',
     paragraphs: [
       'The fertile Indus floodplain supported extensive agriculture — wheat, barley, peas, and cotton were cultivated. The Great Granary stored surplus grain for the city\'s population.',
-      'Trade networks extended to Mesopotamia, with distinctive Indus seals, beads, and weights found across the ancient world. A standardised system of weights and measures facilitated commerce.',
+      'Trade networks extended to Mesopotamia, with distinctive Indus seals, beads, and weights found across the ancient world.',
     ],
     facts: [
       { icon: '🌾', text: 'Wheat, barley, and cotton were primary crops of the region' },
       { icon: '🏛️', text: 'The Great Granary stored food for the entire city' },
-      { icon: '⚖️', text: 'Standardised weights and measures for trade across civilisations' },
+      { icon: '⚖️', text: 'Standardised weights and measures for international trade' },
     ],
   },
   {
@@ -131,7 +130,7 @@ const sections = [
     image: '/images/city-aerial.png',
     paragraphs: [
       'Mohenjo-daro\'s grid-like street system is one of the earliest examples of urban planning. Main streets ran perfectly North-South and East-West, intersecting at right angles.',
-      'Houses were constructed with standardised baked bricks (ratio 1:2:4), had multiple rooms, courtyards, wells, and private bathrooms — a level of domestic comfort unmatched in the ancient world.',
+      'Houses were constructed with standardised baked bricks (ratio 1:2:4), had multiple rooms, courtyards, wells, and private bathrooms — unmatched comfort in the ancient world.',
     ],
     facts: [
       { icon: '🗺️', text: 'Perfect grid layout with streets running N-S and E-W' },
@@ -146,15 +145,12 @@ function App() {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    // Simulate loading
     const timer = setTimeout(() => setLoaded(true), 2000)
     return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -164,14 +160,11 @@ function App() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
+          if (entry.isIntersecting) entry.target.classList.add('visible')
         })
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     )
-
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [loaded])
@@ -187,7 +180,7 @@ function App() {
       {/* Dust particles */}
       <DustCanvas />
 
-      {/* Navigation */}
+      {/* Navigation — NO credits link */}
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <a href="#" className="nav-logo">MOHENJO-DARO</a>
         <ul className="nav-links">
@@ -195,7 +188,6 @@ function App() {
           <li><a href="#drainage">Drainage</a></li>
           <li><a href="#agriculture">Agriculture</a></li>
           <li><a href="#city-planning">City</a></li>
-          <li><a href="#credits">Credits</a></li>
         </ul>
       </nav>
 
@@ -220,54 +212,57 @@ function App() {
         </div>
       </section>
 
-      {/* Content Sections */}
+      {/* Content Sections — 3D Image Cards */}
       {sections.map((section) => (
         <section key={section.id} id={section.id} className="section">
-          <div
-            className="section-bg"
-            style={{ backgroundImage: `url(${section.image})` }}
-          />
-          <div className="section-gradient" />
-          <div className="section-content">
-            <div className="section-number reveal reveal-delay-1">
-              {section.number}
+          <div className="section-inner">
+            {/* 3D Image Card */}
+            <div className="image-3d-wrapper reveal reveal-delay-1">
+              <div className="image-3d-card">
+                <img src={section.image} alt={section.title} loading="lazy" />
+              </div>
             </div>
-            <h2 className="section-title reveal reveal-delay-2">
-              {section.title}
-            </h2>
-            {section.paragraphs.map((p, i) => (
-              <p key={i} className="section-text reveal reveal-delay-3">
-                {p}
-              </p>
-            ))}
-            <div className="section-facts reveal reveal-delay-4">
-              {section.facts.map((fact, i) => (
-                <div key={i} className="fact">
-                  <span className="fact-icon">{fact.icon}</span>
-                  <span className="fact-text">{fact.text}</span>
-                </div>
+
+            {/* Text Content */}
+            <div className="section-text-content">
+              <div className="section-number reveal reveal-delay-2">
+                {section.number}
+              </div>
+              <h2 className="section-title reveal reveal-delay-2">
+                {section.title}
+              </h2>
+              {section.paragraphs.map((p, i) => (
+                <p key={i} className="section-text reveal reveal-delay-3">
+                  {p}
+                </p>
               ))}
+              <div className="section-facts reveal reveal-delay-4">
+                {section.facts.map((fact, i) => (
+                  <div key={i} className="fact">
+                    <span className="fact-icon">{fact.icon}</span>
+                    <span className="fact-text">{fact.text}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
       ))}
 
-      {/* Credits Section */}
-      <section id="credits" className="credits">
+      {/* Small credits footer — NO separate section */}
+      <footer className="credits">
         <div className="credits-content">
-          <p className="credits-title reveal">Project Report</p>
-          <div className="credits-card reveal reveal-delay-1">
+          <div className="credits-card">
+            <p className="credits-title">Project Report</p>
             <h2 className="credits-name">Hardik Jain</h2>
             <p className="credits-school">Vidya Global School</p>
             <div className="credits-divider" />
             <p className="credits-label">Subject</p>
             <p className="credits-subject">Social Science (SST)</p>
           </div>
-          <p className="credits-footer reveal reveal-delay-2">
-            Built with ❤️ by Hindia Tech Labs
-          </p>
+          <p className="credits-footer">Built with ❤️ by Hindia Tech Labs</p>
         </div>
-      </section>
+      </footer>
     </>
   )
 }
